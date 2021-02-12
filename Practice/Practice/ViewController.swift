@@ -8,11 +8,20 @@
 import UIKit
 
 class ViewController: UIViewController {
+    @IBOutlet var cityLabel: UILabel
+    @IBOutlet var populationLabel: UILabel
+    @IBOutlet var flagImageView: UIImageView
+    var city: City?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         getRequest()
+    }
+    
+    func render() {
+        cityLabel.text = city?.city
+        populationLabel.text = city?.population
     }
     
     func getRequest() {
@@ -39,7 +48,7 @@ class ViewController: UIViewController {
             
             do {
                 let city = try JSONDecoder.init().decode(City.self, from: data)
-                print(city as Any)
+                render()
             } catch let error {
                 print(error.localizedDescription)
                 return
