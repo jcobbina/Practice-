@@ -8,9 +8,9 @@
 import UIKit
 
 class ViewController: UIViewController {
-    @IBOutlet var cityLabel: UILabel
-    @IBOutlet var populationLabel: UILabel
-    @IBOutlet var flagImageView: UIImageView
+    @IBOutlet var cityLabel: UILabel!
+    @IBOutlet var populationLabel: UILabel!
+    @IBOutlet var flagImageView: UIImageView!
     var city: City?
     
     override func viewDidLoad() {
@@ -20,8 +20,15 @@ class ViewController: UIViewController {
     }
     
     func render() {
-        cityLabel.text = city?.city
-        populationLabel.text = city?.population
+        DispatchQueue.main.async {
+            if let population = self.city?.population {
+                self.populationLabel.text = String(population)
+            }
+            if let cityname = self.city?.city {
+                self.flagImageView.image = UIImage(named: cityname)
+                self.cityLabel.text = cityname
+            }
+        }
     }
     
     func getRequest() {
@@ -48,7 +55,8 @@ class ViewController: UIViewController {
             
             do {
                 let city = try JSONDecoder.init().decode(City.self, from: data)
-                render()
+                self.city = city
+                self.render()
             } catch let error {
                 print(error.localizedDescription)
                 return
